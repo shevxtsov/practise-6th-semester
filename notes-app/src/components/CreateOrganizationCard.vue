@@ -50,7 +50,7 @@ const rules: FormRules = {
   },
 }
 
-async function handleSubmit() {
+const handleSubmit = async () => {
   try {
     await formRef.value?.validate()
   } catch {

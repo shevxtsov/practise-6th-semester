@@ -36,12 +36,12 @@ const createdAt = computed(() =>
     : '',
 )
 
-function handleRemove() {
+const handleRemove = () => {
   organizationStore.removeOrganization()
   message.info('Организация удалена')
 }
 
-function handleLeave() {
+const handleLeave = () => {
   organizationStore.leaveOrganization()
   message.info('Вы вышли из организации')
 }

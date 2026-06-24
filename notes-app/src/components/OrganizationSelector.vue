@@ -31,16 +31,15 @@ const industryLabels: Record<string, string> = {
   other: 'Другое',
 }
 
-// Если организаций ещё нет — сразу открываем форму создания.
 const mode = ref<'list' | 'create'>(
   organizations.value.length > 0 ? 'list' : 'create',
 )
 
-function handleEnter(id: string) {
+const handleEnter = (id: string) => {
   organizationStore.enterOrganization(id)
 }
 
-function handleRemove(id: string) {
+const handleRemove = (id: string) => {
   organizationStore.removeOrganization(id)
   message.info('Организация удалена')
   if (organizations.value.length === 0) mode.value = 'create'
