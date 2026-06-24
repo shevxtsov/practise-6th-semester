@@ -13,12 +13,14 @@ import {
 import {
   AddOutline,
   CreateOutline,
+  DownloadOutline,
   TrashOutline,
 } from '@vicons/ionicons5'
 
 import NoteFormModal from '@/components/NoteFormModal.vue'
 import { useNotesStore } from '@/stores/notes'
 import { meetingTypeLabels, type Meeting, type Note } from '@/types/note'
+import { downloadNote } from '@/utils/noteFile'
 
 const props = defineProps<{ meeting: Meeting }>()
 const emit = defineEmits<{ edit: [meeting: Meeting] }>()
@@ -57,6 +59,11 @@ const openEditNote = (note: Note) => {
 const handleRemoveNote = (id: string) => {
   notesStore.removeNote(id)
   message.info('Заметка удалена')
+}
+
+const handleDownloadNote = (note: Note) => {
+  downloadNote(note, props.meeting)
+  message.success('Файл заметки сохранён')
 }
 
 const handleRemoveMeeting = () => {
@@ -128,6 +135,12 @@ const handleRemoveMeeting = () => {
                   <NIcon :component="CreateOutline" />
                 </template>
                 Изменить
+              </NButton>
+              <NButton text size="tiny" @click="handleDownloadNote(note)">
+                <template #icon>
+                  <NIcon :component="DownloadOutline" />
+                </template>
+                Скачать
               </NButton>
               <NPopconfirm @positive-click="handleRemoveNote(note.id)">
                 <template #trigger>
