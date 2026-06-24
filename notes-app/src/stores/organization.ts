@@ -17,7 +17,7 @@ export const useOrganizationStore = defineStore(
 
     const hasOrganization = computed(() => organization.value !== null)
 
-    function createOrganization(draft: OrganizationDraft) {
+    const createOrganization = (draft: OrganizationDraft) => {
       const org: Organization = {
         id: crypto.randomUUID(),
         createdAt: new Date().toISOString(),
@@ -28,7 +28,7 @@ export const useOrganizationStore = defineStore(
       return org
     }
 
-    function updateOrganization(patch: Partial<OrganizationDraft>) {
+    const updateOrganization = (patch: Partial<OrganizationDraft>) => {
       const index = organizations.value.findIndex(
         (o) => o.id === currentOrganizationId.value,
       )
@@ -36,20 +36,17 @@ export const useOrganizationStore = defineStore(
       organizations.value[index] = { ...organizations.value[index], ...patch }
     }
 
-    // Выйти из текущей организации, оставив её в списке.
-    function leaveOrganization() {
+    const leaveOrganization = () => {
       currentOrganizationId.value = null
     }
 
-    // Войти в одну из уже созданных организаций.
-    function enterOrganization(id: string) {
+    const enterOrganization = (id: string) => {
       if (organizations.value.some((o) => o.id === id)) {
         currentOrganizationId.value = id
       }
     }
 
-    // Полностью удалить организацию из списка.
-    function removeOrganization(id?: string) {
+    const removeOrganization = (id?: string) => {
       const targetId = id ?? currentOrganizationId.value
       if (!targetId) return
       organizations.value = organizations.value.filter((o) => o.id !== targetId)
@@ -71,6 +68,6 @@ export const useOrganizationStore = defineStore(
     }
   },
   {
-    persist: true,
-  },
+    persist: true
+  }
 )
