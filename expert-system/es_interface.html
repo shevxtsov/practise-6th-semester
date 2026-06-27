@@ -1,0 +1,363 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Подбор печати — экспертная система · PROSTAMP.KZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#E0382C; --red-dark:#C12E22; --ink:#322E2D; --ink-2:#3D3837;
+    --maroon:#5A1410; --bg:#F0F0F0; --card:#FFFFFF; --head:#333333;
+    --muted:#777777; --line:#E4E4E4; --line-2:#D7D7D7; --seal:#CE3225;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0; background:var(--bg); color:var(--head);
+    font-family:"Open Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; line-height:1.55}
+  a{color:var(--red); text-decoration:none}
+  .topbar{background:linear-gradient(180deg,var(--ink-2),var(--ink)); border-bottom:5px solid var(--maroon)}
+  .topbar-inner{max-width:1180px; margin:0 auto; display:flex; align-items:center; justify-content:center;
+    gap:34px; padding:14px 20px; flex-wrap:wrap}
+  .nav{display:flex; gap:30px; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase}
+  .nav a{color:#EDEDED} .nav a:hover{color:#fff}
+  .logo{display:flex; flex-direction:column; align-items:center; padding:8px 18px;
+    border:2px solid #EDEDED; border-radius:8px; box-shadow:inset 0 0 0 2px var(--ink), 0 0 0 1px #555; background:#fff}
+  .logo .l1{font-weight:800; font-size:20px; letter-spacing:.04em; color:#2B2826; line-height:1}
+  .logo .l2{font-size:7.5px; font-weight:700; letter-spacing:.12em; color:#5a5552; margin-top:3px; text-transform:uppercase}
+  @media(max-width:680px){.nav{display:none}}
+  .hero{position:relative; background:var(--red); color:#fff; overflow:hidden}
+  .hero::before{content:""; position:absolute; inset:0; opacity:.5; background-repeat:repeat; background-size:150px 150px;
+    background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='150'%20height='150'%3E%3Cg%20fill='none'%20stroke='%23C12E22'%20stroke-width='2'%3E%3Ccircle%20cx='38'%20cy='38'%20r='24'/%3E%3Ccircle%20cx='38'%20cy='38'%20r='15'/%3E%3Ccircle%20cx='112'%20cy='112'%20r='24'/%3E%3Ccircle%20cx='112'%20cy='112'%20r='15'/%3E%3Crect%20x='96'%20y='22'%20width='32'%20height='32'%20rx='4'/%3E%3Crect%20x='22'%20y='96'%20width='32'%20height='32'%20rx='4'/%3E%3C/g%3E%3C/svg%3E")}
+  .hero-inner{position:relative; max-width:1180px; margin:0 auto; padding:34px 20px 38px; display:flex;
+    align-items:center; gap:18px; flex-wrap:wrap}
+  .hero h1{margin:0; font-weight:300; font-size:clamp(24px,4vw,40px); line-height:1.05}
+  .hero h1 b{display:block; font-weight:800; letter-spacing:.005em}
+  .hero p{margin:8px 0 0; font-size:15px; max-width:560px; opacity:.95}
+  .hero-badge{margin-left:auto; flex:0 0 auto}
+  .wrap{max-width:1180px; margin:0 auto; padding:34px 20px 60px}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:26px}
+  @media(max-width:860px){.grid{grid-template-columns:1fr; gap:22px}}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:6px;
+    box-shadow:0 1px 2px rgba(0,0,0,.04); padding:24px}
+  .card-head{font-weight:800; text-transform:uppercase; letter-spacing:.04em; font-size:16px; color:var(--head);
+    display:inline-block; padding-bottom:8px; margin:0 0 18px; border-bottom:3px solid var(--red)}
+  .field{margin-bottom:16px}
+  .field > label{display:block; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+    color:#555; margin-bottom:8px}
+  .seg{display:flex; flex-wrap:wrap; gap:7px}
+  .seg button{font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; color:#555;
+    border:1px solid var(--line-2); background:#fafafa; padding:8px 13px; border-radius:4px;
+    transition:all .12s ease; flex:1 1 auto; min-width:max-content}
+  .seg button:hover{border-color:#aaa; background:#fff}
+  .seg button[aria-pressed="true"]{background:var(--red); color:#fff; border-color:var(--red); box-shadow:0 1px 3px rgba(224,56,44,.35)}
+  .seg button:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+  .actions{display:flex; gap:10px; margin-top:22px}
+  .btn{font-family:inherit; font-weight:700; text-transform:uppercase; letter-spacing:.04em; font-size:13.5px;
+    cursor:pointer; border-radius:4px; padding:13px 20px; transition:all .14s ease}
+  .btn-go{background:var(--red); color:#fff; border:1px solid var(--red); flex:1}
+  .btn-go:hover{background:var(--red-dark); border-color:var(--red-dark)}
+  .btn-reset{background:#fff; color:#666; border:1px solid var(--line-2)}
+  .btn-reset:hover{border-color:#999; color:#333}
+  .btn:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+  .presets{margin-top:20px; padding-top:18px; border-top:1px solid var(--line)}
+  .presets .lbl{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#999; margin-bottom:10px}
+  .preset-row{display:flex; flex-wrap:wrap; gap:7px}
+  .preset-row button{font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; background:#fff;
+    border:1px solid var(--line-2); color:#666; padding:6px 11px; border-radius:20px}
+  .preset-row button:hover{border-color:var(--red); color:var(--red)}
+  .seal-stage{display:flex; justify-content:center; align-items:center; padding:6px 0 20px; min-height:200px}
+  .seal{transform-origin:center}
+  .seal.stamp-in{animation:stampDown .42s cubic-bezier(.2,1.3,.5,1) both}
+  @keyframes stampDown{0%{opacity:0;transform:scale(1.32) rotate(-7deg)}55%{opacity:1;transform:scale(.97) rotate(1.5deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+  .empty-note{text-align:center; color:var(--muted); font-size:13.5px; max-width:250px; margin:0 auto}
+  .empty-note .big{display:block; font-weight:800; text-transform:uppercase; letter-spacing:.03em; font-size:14px; color:var(--head); margin-bottom:7px}
+  .recs{list-style:none; margin:4px 0 0; padding:0}
+  .rec{display:flex; gap:14px; padding:12px 0; border-top:1px solid var(--line)}
+  .rec:first-child{border-top:none}
+  .rec .cat{font-weight:800; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--red); flex:0 0 108px; padding-top:2px}
+  .rec .val{font-size:13.5px; color:#333}
+  .rec.advice .cat{color:#B8860B}
+  .explain{margin-top:20px; border-top:1px solid var(--line); padding-top:16px}
+  .explain summary{cursor:pointer; font-weight:800; text-transform:uppercase; letter-spacing:.04em; font-size:12.5px;
+    color:var(--head); list-style:none; display:flex; align-items:center; gap:9px}
+  .explain summary::-webkit-details-marker{display:none}
+  .explain summary::before{content:"+"; display:inline-flex; justify-content:center; align-items:center;
+    width:18px; height:18px; background:var(--red); color:#fff; border-radius:3px; font-weight:700; font-size:14px; line-height:1}
+  .explain[open] summary::before{content:"–"}
+  .trace{margin-top:14px}
+  .trace .ln{display:flex; gap:10px; align-items:baseline; padding:7px 0; border-top:1px dashed var(--line); font-size:12.5px}
+  .trace .ln:first-child{border-top:none}
+  .trace .rid{flex:0 0 auto; font-weight:800; color:#fff; background:var(--ink); border-radius:3px; padding:1px 6px; font-size:11px}
+  .trace .body{color:#555}
+  .trace .cond{color:#333; font-weight:600}
+  .trace .arr{color:var(--red); font-weight:800; padding:0 3px}
+  .trace .concl{color:var(--head)}
+  .trace .head{font-size:11.5px; color:#999; padding-bottom:4px; border-top:none}
+  .footer{background:var(--ink); color:#cfcccb; margin-top:10px}
+  .footer-inner{max-width:1180px; margin:0 auto; padding:18px 20px; display:flex; justify-content:space-between;
+    gap:14px; flex-wrap:wrap; font-size:12.5px}
+  .footer .muted{color:#8e8a88}
+  @media(prefers-reduced-motion:reduce){.seal.stamp-in{animation:none}}
+</style>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <nav class="nav"><a>Главная</a><a>Документы</a></nav>
+    <div class="logo">
+      <span class="l1">PROSTAMP.KZ</span>
+      <span class="l2">изготовление печатей и штампов</span>
+    </div>
+    <nav class="nav"><a>Подбор печати</a><a>Контакты</a></nav>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Экспертный подбор<b>печати и штампа</b></h1>
+      <p>Ответьте на шесть вопросов о заказе — система подберёт технологию, оснастку и защиту и объяснит своё решение.</p>
+    </div>
+    <div class="hero-badge" aria-hidden="true">
+      <svg width="92" height="92" viewBox="0 0 92 92">
+        <circle cx="46" cy="46" r="42" fill="none" stroke="#fff" stroke-width="3" opacity=".95"/>
+        <circle cx="46" cy="46" r="33" fill="none" stroke="#fff" stroke-width="1.4" opacity=".8"/>
+        <text x="46" y="42" text-anchor="middle" font-family="Open Sans,sans-serif" font-weight="800" font-size="15" fill="#fff">ЭС</text>
+        <text x="46" y="58" text-anchor="middle" font-family="Open Sans,sans-serif" font-weight="700" font-size="7" letter-spacing="1.5" fill="#fff" opacity=".9">ПОДБОР</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="grid">
+    <section class="card" aria-label="Параметры заказа">
+      <h2 class="card-head">Параметры заказа</h2>
+
+      <div class="field" data-key="client">
+        <label>Тип клиента</label>
+        <div class="seg" role="group">
+          <button data-v="legal">Юр. лицо (ТОО)</button>
+          <button data-v="entrepreneur">ИП</button>
+          <button data-v="individual">Физ. лицо</button>
+        </div>
+      </div>
+      <div class="field" data-key="purpose">
+        <label>Назначение изделия</label>
+        <div class="seg" role="group">
+          <button data-v="main-seal">Основная печать</button>
+          <button data-v="stamp">Штамп</button>
+          <button data-v="facsimile">Факсимиле</button>
+          <button data-v="doctor-seal">Печать врача</button>
+        </div>
+      </div>
+      <div class="field" data-key="intensity">
+        <label>Интенсивность использования</label>
+        <div class="seg" role="group">
+          <button data-v="low">Низкая</button>
+          <button data-v="medium">Средняя</button>
+          <button data-v="high">Высокая</button>
+        </div>
+      </div>
+      <div class="field" data-key="budget">
+        <label>Бюджет</label>
+        <div class="seg" role="group">
+          <button data-v="economy">Эконом</button>
+          <button data-v="standard">Стандарт</button>
+          <button data-v="premium">Премиум</button>
+        </div>
+      </div>
+      <div class="field" data-key="protection">
+        <label>Защита от подделки</label>
+        <div class="seg" role="group">
+          <button data-v="yes">Да</button>
+          <button data-v="no">Нет</button>
+        </div>
+      </div>
+      <div class="field" data-key="urgency">
+        <label>Срочность</label>
+        <div class="seg" role="group">
+          <button data-v="normal">Обычная</button>
+          <button data-v="urgent">Срочная</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-go" id="go">Получить рекомендацию</button>
+        <button class="btn btn-reset" id="reset">Сброс</button>
+      </div>
+
+      <div class="presets">
+        <div class="lbl">Готовые сценарии</div>
+        <div class="preset-row" id="presets"></div>
+      </div>
+    </section>
+
+    <section class="card" aria-label="Рекомендация">
+      <h2 class="card-head">Рекомендация</h2>
+      <div class="seal-stage" id="stage">
+        <div class="empty-note" id="empty">
+          <span class="big">Заказ не задан</span>
+          Выберите параметры слева и нажмите «Получить рекомендацию» — система подберёт технологию и оснастку.
+        </div>
+      </div>
+      <ul class="recs" id="recs"></ul>
+      <details class="explain" id="explainBox" style="display:none">
+        <summary>Как система пришла к выводу</summary>
+        <div class="trace" id="trace"></div>
+      </details>
+    </section>
+
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-inner">
+    <span>Прототип экспертной системы · продукционная модель (11 правил) · прямой логический вывод</span>
+    <span class="muted">© Учебный прототип в стиле PROSTAMP.KZ</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var order = {client:null,purpose:null,intensity:null,budget:null,protection:null,urgency:null};
+  var LABELS = { budget:{economy:"эконом",standard:"стандарт",premium:"премиум"} };
+
+  function infer(o){
+    var recs=[], trace=[], tech=null;
+    if(o.intensity==="high"){
+      tech="Флэш-технология";
+      recs.push(["Технология","Флэш-технология: бесшумная автоматическая оснастка, ресурс до 50 000 оттисков"]);
+      trace.push(["П1","интенсивность = высокая","технология = флэш"]);
+    } else if(o.purpose==="facsimile"){
+      tech="Лазерная гравировка";
+      recs.push(["Технология","Лазерная гравировка: максимальная детализация для воспроизведения подписи"]);
+      trace.push(["П2","назначение = факсимиле","технология = лазер"]);
+    } else if(o.intensity==="medium" && o.budget!=="economy"){
+      tech="Фотополимер";
+      recs.push(["Технология","Фотополимерная технология: автоматическая оснастка, высокое качество оттиска"]);
+      trace.push(["П3","интенсивность = средняя И бюджет ≠ эконом","технология = фотополимер"]);
+    } else {
+      tech="Резина";
+      recs.push(["Технология","Резиновое клише (вулканизация) на ручной оснастке: бюджетное решение"]);
+      trace.push(["П4","прочие случаи","технология = резина"]);
+    }
+    if(o.intensity==="high"||o.intensity==="medium"){
+      recs.push(["Оснастка","Автоматическая оснастка Trodat / Colop для частого использования"]);
+      trace.push(["П5","интенсивность ∈ {высокая, средняя}","оснастка = автоматическая"]);
+    } else if(o.intensity==="low"){
+      recs.push(["Оснастка","Ручная или карманная оснастка — достаточно при низкой интенсивности"]);
+      trace.push(["П6","интенсивность = низкая","оснастка = ручная"]);
+    }
+    if(o.protection==="yes"){
+      recs.push(["Защита","Защитные элементы: микротекст, гильоширная сетка, скрытые УФ-метки, химзащита"]);
+      trace.push(["П7","защита = да","добавить защитные элементы"]);
+    }
+    if(o.client==="legal" && o.purpose==="main-seal" && o.protection==="no"){
+      recs.push(["__advice","Для основной печати организации желательно добавить защиту от подделки",true]);
+      trace.push(["П8","юр. лицо И основная печать И защита = нет","совет: добавить защиту"]);
+    }
+    if(o.urgency==="urgent" && o.intensity!=="high"){
+      recs.push(["Срок","Срочное изготовление от 1 часа (резина / фотополимер)"]);
+      trace.push(["П9","срочно И интенсивность ≠ высокая","срок = от 1 часа"]);
+    } else if(o.urgency==="urgent" && o.intensity==="high"){
+      recs.push(["Срок","Флэш-оснастка требует больше времени: срочно — от 2–3 часов"]);
+      trace.push(["П10","срочно И интенсивность = высокая","срок = от 2–3 часов"]);
+    }
+    var price={economy:"Эконом-сегмент",standard:"Стандартный сегмент",premium:"Премиум-сегмент"}[o.budget];
+    recs.push(["Цена",price]);
+    trace.push(["П11","бюджет = "+LABELS.budget[o.budget],"ценовая категория = "+price.toLowerCase()]);
+    return {recs:recs, trace:trace, tech:tech};
+  }
+
+  function sealSVG(techName){
+    var top="ПЕЧАТНАЯ · МАСТЕРСКАЯ · ПЕЧАТНАЯ · МАСТЕРСКАЯ ·";
+    var bottom="ИЗГОТОВЛЕНИЕ ПЕЧАТЕЙ И ШТАМПОВ";
+    var c="#CE3225";
+    return ''+
+'<svg class="seal" width="180" height="180" viewBox="0 0 200 200" role="img" aria-label="Рекомендованная технология: '+techName+'">'+
+  '<defs><path id="arcTop" d="M 100,100 m -72,0 a 72,72 0 1,1 144,0"/>'+
+  '<path id="arcBot" d="M 100,100 m -64,0 a 64,64 0 1,0 128,0"/></defs>'+
+  '<circle cx="100" cy="100" r="88" fill="none" stroke="'+c+'" stroke-width="4" opacity=".92"/>'+
+  '<circle cx="100" cy="100" r="79" fill="none" stroke="'+c+'" stroke-width="1.5" opacity=".75"/>'+
+  '<circle cx="100" cy="100" r="50" fill="none" stroke="'+c+'" stroke-width="1.5" opacity=".75"/>'+
+  '<text font-family="Open Sans,sans-serif" font-weight="700" font-size="11" letter-spacing="1.4" fill="'+c+'" opacity=".9"><textPath href="#arcTop" startOffset="2%">'+top+'</textPath></text>'+
+  '<text font-family="Open Sans,sans-serif" font-weight="700" font-size="10" letter-spacing="1.4" fill="'+c+'" opacity=".9"><textPath href="#arcBot" startOffset="9%">'+bottom+'</textPath></text>'+
+  '<text x="100" y="62" text-anchor="middle" font-family="Open Sans,sans-serif" font-weight="700" font-size="10" fill="'+c+'" letter-spacing="2" opacity=".85">★ ★ ★</text>'+
+  '<text x="100" y="103" text-anchor="middle" font-family="Open Sans,sans-serif" font-weight="800" font-size="18" fill="'+c+'">'+wrapTech(techName)+'</text>'+
+  '<text x="100" y="150" text-anchor="middle" font-family="Open Sans,sans-serif" font-weight="700" font-size="8" fill="'+c+'" letter-spacing="1" opacity=".8">РЕКОМЕНДОВАНО</text>'+
+'</svg>';
+  }
+  function wrapTech(t){
+    if(t.length<=11) return '<tspan x="100" dy="0">'+t.toUpperCase()+'</tspan>';
+    var parts=t.split(/[ \-]/), a="",b="";
+    for(var i=0;i<parts.length;i++){ if((a+parts[i]).length<=10||!a) a+=(a?" ":"")+parts[i]; else b+=(b?" ":"")+parts[i]; }
+    return '<tspan x="100" dy="-9">'+a.toUpperCase()+'</tspan><tspan x="100" dy="20">'+b.toUpperCase()+'</tspan>';
+  }
+
+  var stage=document.getElementById("stage"), recsEl=document.getElementById("recs");
+  var explainBox=document.getElementById("explainBox"), traceEl=document.getElementById("trace");
+  var FIELDNAMES={client:"тип клиента",purpose:"назначение",intensity:"интенсивность",budget:"бюджет",protection:"защита",urgency:"срочность"};
+
+  function emptyHTML(title,msg){ return '<div class="empty-note"><span class="big">'+title+'</span>'+msg+'</div>'; }
+
+  function render(){
+    var missing=Object.keys(order).filter(function(k){return !order[k];});
+    if(missing.length){
+      stage.innerHTML=emptyHTML("Заполните все поля","Не выбрано: "+missing.map(function(k){return FIELDNAMES[k];}).join(", ")+".");
+      recsEl.innerHTML=""; explainBox.style.display="none"; return;
+    }
+    var r=infer(order);
+    stage.innerHTML=sealSVG(r.tech);
+    var seal=stage.querySelector(".seal"); void seal.offsetWidth; seal.classList.add("stamp-in");
+    recsEl.innerHTML=r.recs.map(function(x){
+      if(x[2]===true) return '<li class="rec advice"><span class="cat">Совет</span><span class="val">'+x[1]+'</span></li>';
+      return '<li class="rec"><span class="cat">'+x[0]+'</span><span class="val">'+x[1]+'</span></li>';
+    }).join("");
+    traceEl.innerHTML='<div class="ln head">Сработавшие правила базы знаний (прямой вывод):</div>'+
+      r.trace.map(function(t){
+        return '<div class="ln"><span class="rid">'+t[0]+'</span><span class="body">ЕСЛИ <span class="cond">'+t[1]+'</span><span class="arr">⇒</span><span class="concl">'+t[2]+'</span></span></div>';
+      }).join("");
+    explainBox.style.display="block";
+  }
+
+  document.querySelectorAll(".field").forEach(function(field){
+    var key=field.getAttribute("data-key");
+    field.querySelectorAll(".seg button").forEach(function(b){
+      b.setAttribute("aria-pressed","false");
+      b.addEventListener("click",function(){
+        field.querySelectorAll(".seg button").forEach(function(x){x.setAttribute("aria-pressed","false");});
+        b.setAttribute("aria-pressed","true"); order[key]=b.getAttribute("data-v");
+      });
+    });
+  });
+  function applyOrder(o){
+    order=Object.assign({client:null,purpose:null,intensity:null,budget:null,protection:null,urgency:null},o);
+    document.querySelectorAll(".field").forEach(function(field){
+      var key=field.getAttribute("data-key"), v=order[key];
+      field.querySelectorAll(".seg button").forEach(function(b){
+        b.setAttribute("aria-pressed", b.getAttribute("data-v")===v ? "true":"false");
+      });
+    });
+  }
+  document.getElementById("go").addEventListener("click",render);
+  document.getElementById("reset").addEventListener("click",function(){
+    applyOrder({});
+    stage.innerHTML=emptyHTML("Заказ не задан","Выберите параметры слева и нажмите «Получить рекомендацию» — система подберёт технологию и оснастку.");
+    recsEl.innerHTML=""; explainBox.style.display="none";
+  });
+
+  var PRESETS=[
+    ["Печать ТОО, активная", {client:"legal",purpose:"main-seal",intensity:"high",budget:"premium",protection:"yes",urgency:"normal"}],
+    ["Факсимиле, срочно", {client:"individual",purpose:"facsimile",intensity:"low",budget:"economy",protection:"no",urgency:"urgent"}],
+    ["Штамп ИП", {client:"entrepreneur",purpose:"stamp",intensity:"medium",budget:"standard",protection:"no",urgency:"normal"}],
+    ["Печать ТОО без защиты", {client:"legal",purpose:"main-seal",intensity:"medium",budget:"standard",protection:"no",urgency:"normal"}]
+  ];
+  var prow=document.getElementById("presets");
+  PRESETS.forEach(function(p){
+    var b=document.createElement("button"); b.textContent=p[0];
+    b.addEventListener("click",function(){ applyOrder(p[1]); render(); });
+    prow.appendChild(b);
+  });
+})();
+</script>
