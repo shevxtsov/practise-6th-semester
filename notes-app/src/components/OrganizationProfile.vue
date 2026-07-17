@@ -45,7 +45,7 @@ const drawerTitle = computed(() => {
       {{ triggerLabel }}
     </NButton>
 
-    <NDrawer v-model:show="open" :width="480" placement="right">
+    <NDrawer v-model:show="open" width="min(480px, 100vw)" placement="right">
       <NDrawerContent :title="drawerTitle" closable>
         <OrganizationOverview v-if="hasOrganization" />
         <OrganizationSelector v-else @created="open = false" />
@@ -75,5 +75,9 @@ const drawerTitle = computed(() => {
 
 .profile-name {
   font-weight: 500;
+  max-width: 45vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

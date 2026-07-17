@@ -13,3 +13,34 @@ body {
 #app {
   min-height: 100vh;
 }
+
+@media (max-width: 640px) {
+  .n-date-panel.n-date-panel--datetimerange,
+  .n-date-panel.n-date-panel--daterange {
+    grid-template-areas:
+      'header'
+      'left-calendar'
+      'right-calendar'
+      'footer'
+      'action' !important;
+    max-width: calc(100vw - 16px);
+    max-height: calc(100vh - 120px);
+    max-height: calc(100dvh - 120px);
+    overflow-y: auto;
+  }
+
+  .n-date-panel.n-date-panel--datetimerange .n-date-panel__vertical-divider,
+  .n-date-panel.n-date-panel--daterange .n-date-panel__vertical-divider {
+    display: none;
+  }
+
+  .n-date-panel.n-date-panel--datetimerange .n-date-panel-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .n-date-panel.n-date-panel--datetimerange .n-date-panel-header > * {
+    flex: 1 1 100%;
+    margin-right: 0 !important;
+  }
+}

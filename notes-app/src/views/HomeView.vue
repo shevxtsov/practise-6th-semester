@@ -199,6 +199,27 @@ const openEditMeeting = (meeting: Meeting) => {
   }
 }
 
+@media (max-width: 640px) {
+  .home {
+    padding: 1.25rem 0.75rem 3rem;
+  }
+
+  .home-head {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 1.25rem;
+  }
+
+  .search-keyword,
+  .search-range {
+    flex: 1 1 100%;
+  }
+
+  .groups {
+    gap: 1rem;
+  }
+}
+
 .home-empty {
   padding: 4rem 1rem;
 }

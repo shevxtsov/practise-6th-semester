@@ -248,7 +248,36 @@ const handleRemoveMeeting = () => {
 
 .note-actions {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
   margin-top: 0.5rem;
+}
+
+@media (max-width: 480px) {
+  .group :deep(.n-card-header) {
+    padding: 1rem 1rem 0.5rem;
+  }
+
+  .group :deep(.n-card__content),
+  .group :deep(.n-card__action) {
+    padding: 0.75rem 1rem;
+  }
+
+  .note {
+    padding: 0.6rem 0.7rem;
+  }
+
+  .note :deep(.n-thing-header) {
+    flex-wrap: wrap;
+    gap: 0.15rem 0.5rem;
+  }
+
+  .note-date {
+    white-space: normal;
+  }
+
+  .note-actions {
+    gap: 0.4rem 0.85rem;
+  }
 }
 </style>

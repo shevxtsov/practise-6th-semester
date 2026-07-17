@@ -55,4 +55,10 @@ import HomeView from '@/views/HomeView.vue'
   margin: 0 auto;
   width: 100%;
 }
+
+@media (max-width: 640px) {
+  .header {
+    padding: 0 0.75rem;
+  }
+}
 </style>

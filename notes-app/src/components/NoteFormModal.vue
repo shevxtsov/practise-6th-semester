@@ -149,7 +149,8 @@ const handleSubmit = async () => {
     v-model:show="show"
     preset="card"
     :title="isEdit ? 'Редактирование заметки' : 'Новая заметка'"
-    :style="{ maxWidth: '520px' }"
+    :style="{ width: 'min(520px, calc(100vw - 24px))' }"
+    content-style="max-height: calc(100dvh - 180px); overflow-y: auto;"
   >
     <NForm
       ref="formRef"
@@ -224,5 +225,16 @@ const handleSubmit = async () => {
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
+}
+
+@media (max-width: 480px) {
+  .footer {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .footer :deep(.n-button) {
+    width: 100%;
+  }
 }
 </style>
